@@ -16,6 +16,7 @@ class UserListPage extends StatelessWidget {
       body: controller.obx(
         (state) {
           return ListView.builder(
+            controller: controller.scroll,
             itemCount: state?.length ?? 0,
             itemBuilder: (context, index) {
               final user = state?[index];
