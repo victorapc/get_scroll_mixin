@@ -9,9 +9,12 @@ class UserListController extends GetxController
   late final Worker workerPage;
   final _page = 1.obs;
   final _limit = 12;
+  final _loading = false.obs;
 
   UserListController({required UserRepository userRepository})
       : _userRepository = userRepository;
+
+  bool get isLoading => _loading.value;
 
   @override
   void onInit() {
@@ -34,12 +37,14 @@ class UserListController extends GetxController
   }
 
   Future<void> _findUser() async {
+    _loading(true);
     final result = await _userRepository.getAllUsers(_page.value, _limit);
 
     final stateResult = state ?? [];
     stateResult.addAll(result);
 
     change(stateResult, status: RxStatus.success());
+    _loading(false);
   }
 
   @override
@@ -47,6 +52,9 @@ class UserListController extends GetxController
 
   @override
   Future<void> onEndScroll() async {
-    _page.value++;
+    // Apenas irá incrementar uma nova página se não tiver carregando dados.
+    if (!isLoading) {
+      _page.value++;
+    }
   }
 }
