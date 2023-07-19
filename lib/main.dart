@@ -29,8 +29,9 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(
           name: '/',
-          binding: BindingsBuilder.put(() => UserListController()),
-          page: () => const UserListPage(),
+          binding: BindingsBuilder.put(
+              () => UserListController(userRepository: Get.find())),
+          page: () => UserListPage(),
         ),
       ],
     );
